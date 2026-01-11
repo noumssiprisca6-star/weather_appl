@@ -5,7 +5,7 @@
   */
 enum WeatherView
 {
-    TEMPERATURE,
+
     DAYS,
     TIME,
     LOCATION
@@ -13,10 +13,9 @@ enum WeatherView
  //fonction pour le style
 void Drawstyle()
 {
-    WeatherView currentView = TEMPERATURE;
+    WeatherView currentView ;
 
-    // Données 
-    float temperature = 28.5f;
+    
     const char* day = "Lundi";
     const char* time = "14:32";
     const char* location = "Douala, Cameroun";
@@ -33,9 +32,6 @@ void Drawstyle()
     //  ZONE MENU VERTICAL 
      //usage d'un imgui child pour creer une fenetre appartenant a une autre 
     ImGui::BeginChild("Menu", ImVec2(180, 300), true);
-
-    if (ImGui::Button("Température", ImVec2(-1, 45)))
-        currentView = TEMPERATURE;
 
     ImGui::Spacing();
     if (ImGui::Button("Jours", ImVec2(-1, 45)))
@@ -58,11 +54,7 @@ void Drawstyle()
 
     switch (currentView)
     {
-        case TEMPERATURE:
-            ImGui::Text(" Température actuelle");
-            ImGui::Separator();
-            ImGui::Text("%.1f °C", temperature);
-            break;
+        
 
         case DAYS:
             ImGui::Text(" Jour actuel");

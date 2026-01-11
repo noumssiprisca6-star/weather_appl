@@ -9,6 +9,7 @@
 #include "../libs/imgui/backends/imgui_impl_sdl3.h"
 #include "../libs/imgui/backends/imgui_impl_sdlrenderer3.h"
 #include "../include/style.h"
+#include"../include/meteo.h"
 #include <windows.h>
 #include<cstdlib>
 
@@ -51,21 +52,33 @@
     ImGui_ImplSDLRenderer3_Init(renderer);
 
     ImGuiStyle& style = ImGui::GetStyle();
+    style.Colors[ImGuiCol_WindowBg] =ImVec4(1.0f,1.0f,1.0f,1.0f);//blanc
     style.Colors[ImGuiCol_Button]        = ImVec4(0.2f, 0.5f, 0.9f, 1.0f);
     style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.3f, 0.6f, 1.0f, 1.0f);
     style.Colors[ImGuiCol_ButtonActive]  = ImVec4(0.1f, 0.4f, 0.8f, 1.0f);
      
              //les booleens
              bool showstyle = false ;
+             bool icon = false ;
+        
+   
 
-    
      //variable de la boucle principale
-   // creation de la surface
+   // creation de la surface pour mon fond
 SDL_Surface* Surface = IMG_Load("assets/background.jpg");
 //creation de la texture à partir de la surface 
 SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer , Surface);
 //destruction de la surface creer 
 SDL_DestroySurface(Surface);
+ //implementation des icones pour la meteo
+ // =======================
+    // Initialisation météo
+    // =======================
+    MeteoTime time;
+    initTime(time);
+
+Uint32 lastTick = SDL_GetTicks();
+const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
 
     //boucle de jeu
     bool running = true;
@@ -83,6 +96,14 @@ SDL_DestroySurface(Surface);
          * les frames IMGUI commencent a se faire creer ici sinon il y aura des problemes 
          * lors de l'affichage.
          */
+
+       // Avancer le temps automatiquement toutes les 3 secondes
+    Uint32 now = SDL_GetTicks();
+    if (now - lastTick >= HOUR_DURATION)
+    {
+        advanceOneHour(time); // avance d'une heure + mise à jour température
+        lastTick = now;
+    }
         //  IMGUI
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
@@ -92,28 +113,47 @@ SDL_DestroySurface(Surface);
         
 
         //afin de modifier la taille de la fenetre imgui 
-        ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_Once);
+        ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiCond_Once);
 
             ImGui::Begin("Controle meteo" , nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar);
-
+            
           showstyle = true; 
         if(showstyle){
             Drawstyle();
         }
-        ImGui::Separator();
+        
+        
         ImGui::End();
-        ImGui::Render();
+        
+
          SDL_RenderTexture(renderer, texture,nullptr , nullptr);
-        // Rendu
-        //dessin de ImGui
+            
+        // Deuxième fenêtre météo
+        //fenetre translucide 
+        ImGui::SetNextWindowBgAlpha(000.1000f); // a 50 % transparente
+        
+
+        //afin de modifier la taille de la fenetre imgui 
+        ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiCond_Once);
+        ImGui::Begin("Météo" ,nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar);
+
+        // Bouton pour avancer manuellement d'une heure
+        if (ImGui::Button("Avancer d'une heure"))
+            advanceOneHour(time);
+
+        // Affichage dynamique
+        ImGui::Text("Jour : %s", getDayName(time.dayIndex));
+        ImGui::Text("Heure : %d h", time.hour);
+        ImGui::Text("Température : %d °C", time.temperature);
+
+
+         ImGui::Separator();
+        ImGui::End();
+         ImGui::Render();
+
         ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(),renderer);
         SDL_RenderPresent(renderer);
-        
-        
-       
-    }
-    
-        s
+    }    
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
@@ -125,7 +165,7 @@ SDL_DestroySurface(Surface);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    std::cout << "Good bye " << std::endl;
+    std::cout << " sayonara! " << std::endl;
     return 0;
 
 
