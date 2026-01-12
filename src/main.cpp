@@ -66,6 +66,7 @@
    
 
      //variable de la boucle principale
+       //variable de la boucle principale
    // creation de la surface pour mon fond
 SDL_Surface* Surface[3]; 
 Surface[0] = IMG_Load("assets/background.jpg");
@@ -77,9 +78,24 @@ for(int i = 0 ; i<3 ; i++){
 texture[i] = SDL_CreateTextureFromSurface(renderer , Surface[i]);
 } 
 //destruction de la surface creer 
-SDL_DestroySurface(Surface[0]);
+if(Surface[0]){
+    SDL_DestroySurface(Surface[0]);
+    Surface[0]= nullptr;
+
+}
+if(Surface[1]){
+    SDL_DestroySurface(Surface[1]);
+    Surface[1]= nullptr;
+}
+if(Surface[2]){
+    SDL_DestroySurface(Surface[2]);
+    Surface[2]= nullptr;
+
+}
 Uint64 lastChange = 0 ;
 int back =0;
+
+
 
 
 
@@ -117,12 +133,11 @@ const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
         advanceOneHour(time); // avance d'une heure + mise à jour température
         lastTick = now;
     }
-        if(now - lastChange >=8000){
+        
+if(now - lastChange >=5000){
             back =(back + 1) % 3 ;
             lastChange = now ;
         }
-        
-
         //  IMGUI
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
@@ -144,7 +159,6 @@ const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
         
         ImGui::End();
         
-
 
          SDL_RenderTexture(renderer, texture[back],nullptr , nullptr);
             
@@ -181,7 +195,9 @@ const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
     
         
     //effface toutes les fenetres creer
+    for(int i = 0 ; i<3 ; i++){
    SDL_DestroyTexture(texture[back]);
+    }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
