@@ -56,7 +56,9 @@
     style.Colors[ImGuiCol_Button]        = ImVec4(0.2f, 0.5f, 0.9f, 1.0f);
     style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.3f, 0.6f, 1.0f, 1.0f);
     style.Colors[ImGuiCol_ButtonActive]  = ImVec4(0.1f, 0.4f, 0.8f, 1.0f);
-     
+
+//pour le style des textes
+
              //les booleens
              bool showstyle = false ;
              bool icon = false ;
@@ -65,12 +67,22 @@
 
      //variable de la boucle principale
    // creation de la surface pour mon fond
-SDL_Surface* Surface = IMG_Load("assets/background.jpg");
+SDL_Surface* Surface[3]; 
+Surface[0] = IMG_Load("assets/background.jpg");
+Surface[1] = IMG_Load("assets/nb.jpg"); 
+Surface[2] = IMG_Load("assets/cy.jpg");
 //creation de la texture à partir de la surface 
-SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer , Surface);
+SDL_Texture* texture[3] ;
+for(int i = 0 ; i<3 ; i++){
+texture[i] = SDL_CreateTextureFromSurface(renderer , Surface[i]);
+} 
 //destruction de la surface creer 
-SDL_DestroySurface(Surface);
- //implementation des icones pour la meteo
+SDL_DestroySurface(Surface[0]);
+Uint64 lastChange = 0 ;
+int back =0;
+
+
+
  // =======================
     // Initialisation météo
     // =======================
@@ -79,6 +91,7 @@ SDL_DestroySurface(Surface);
 
 Uint32 lastTick = SDL_GetTicks();
 const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
+
 
     //boucle de jeu
     bool running = true;
@@ -104,16 +117,22 @@ const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
         advanceOneHour(time); // avance d'une heure + mise à jour température
         lastTick = now;
     }
+        if(now - lastChange >=8000){
+            back =(back + 1) % 3 ;
+            lastChange = now ;
+        }
+        
+
         //  IMGUI
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
         //fenetre translucide 
-        ImGui::SetNextWindowBgAlpha(000.1000f); // a 50 % transparente
+        ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
         
 
         //afin de modifier la taille de la fenetre imgui 
-        ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiCond_Once);
+        ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_Once);
 
             ImGui::Begin("Controle meteo" , nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar);
             
@@ -126,19 +145,20 @@ const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
         ImGui::End();
         
 
-         SDL_RenderTexture(renderer, texture,nullptr , nullptr);
+
+         SDL_RenderTexture(renderer, texture[back],nullptr , nullptr);
             
         // Deuxième fenêtre météo
         //fenetre translucide 
-        ImGui::SetNextWindowBgAlpha(000.1000f); // a 50 % transparente
+        ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
         
 
         //afin de modifier la taille de la fenetre imgui 
-        ImGui::SetNextWindowSize(ImVec2(400, 200), ImGuiCond_Once);
+        ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
         ImGui::Begin("Météo" ,nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar);
 
         // Bouton pour avancer manuellement d'une heure
-        if (ImGui::Button("Avancer d'une heure"))
+        if (ImGui::Button("METEO"))
             advanceOneHour(time);
 
         // Affichage dynamique
@@ -146,7 +166,8 @@ const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
         ImGui::Text("Heure : %d h", time.hour);
         ImGui::Text("Température : %d °C", time.temperature);
 
-
+        
+        
          ImGui::Separator();
         ImGui::End();
          ImGui::Render();
@@ -160,7 +181,7 @@ const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
     
         
     //effface toutes les fenetres creer
-   SDL_DestroyTexture(texture);
+   SDL_DestroyTexture(texture[back]);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

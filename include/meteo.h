@@ -25,4 +25,5 @@ const char* getDayName(int dayIndex);
 // Générer la température pour cette tranche de 5 heures
 int getTemperatureForTranche(int hour);
 
+
 #endif
