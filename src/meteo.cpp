@@ -1,9 +1,15 @@
 #include "../include/meteo.h"
+#include <SDL3/SDL.h>
 #include <cstdlib>
 #include <ctime>
 #include "../libs/stb/stb_image.h"
 #include"../src/SDL3/SDL3_image/SDL_image.h"
+#include "../libs/stb/stb_image.h"
+#include "../libs/imgui/imgui.h"
 #include <iostream>
+
+#include<string>
+
 
 // Initialisation du temps
 
@@ -19,7 +25,7 @@ void initTime(MeteoTime& time)
 
 const char* getDayName(int dayIndex)
 {
-    static const char* days[NB_JOURS] = {"Lundi","Mardi","Mercredi","Jeudi","Vendredi"};
+     const char* days[NB_JOURS] = {"Lundi","Mardi","Mercredi","Jeudi","Vendredi"};
     return days[dayIndex];
 }
 
@@ -65,5 +71,4 @@ void advanceOneHour(MeteoTime& time)
     }
     
 }
-
 

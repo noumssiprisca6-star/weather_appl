@@ -10,6 +10,7 @@
 #include "../libs/imgui/backends/imgui_impl_sdlrenderer3.h"
 #include "../include/style.h"
 #include"../include/meteo.h"
+#include"../include/renderer.h"
 #include <windows.h>
 #include<cstdlib>
 
@@ -26,7 +27,7 @@
 
     std::cout << "SDL3 initialisé avec succès !!" << std::endl;
  
-    SDL_Window* window = SDL_CreateWindow("Meteo VIsuelle", 800, 600, SDL_WINDOW_RESIZABLE);
+    SDL_Window* window = SDL_CreateWindow("Meteo VIsuelle", 1600, 900, 0);
     if (!window) {
         std::cerr << "Erreur de creation fenêtre: " << std::endl;
         SDL_Quit();
@@ -69,15 +70,16 @@
        //variable de la boucle principale
    // creation de la surface pour mon fond
 SDL_Surface* Surface[3]; 
-Surface[0] = IMG_Load("assets/background.jpg");
-Surface[1] = IMG_Load("assets/nb.jpg"); 
-Surface[2] = IMG_Load("assets/cy.jpg");
+Surface[0] = IMG_Load("assets/ml.jpg");
+Surface[1] = IMG_Load("assets/ui.jpg"); 
+Surface[2] = IMG_Load("assets/ser.jpg");
 //creation de la texture à partir de la surface 
 SDL_Texture* texture[3] ;
 for(int i = 0 ; i<3 ; i++){
 texture[i] = SDL_CreateTextureFromSurface(renderer , Surface[i]);
 } 
 //destruction de la surface creer 
+
 if(Surface[0]){
     SDL_DestroySurface(Surface[0]);
     Surface[0]= nullptr;
@@ -92,21 +94,26 @@ if(Surface[2]){
     Surface[2]= nullptr;
 
 }
-Uint64 lastChange = 0 ;
-int back =0;
+
+    MeteoStats stats;
+    initMeteoStats(stats); // Init stats météo
+
+
+    Uint64 lastChange = 0 ;
+    int back = 0;
 
 
 
 
 
- // =======================
+ 
     // Initialisation météo
-    // =======================
+
     MeteoTime time;
     initTime(time);
 
-Uint32 lastTick = SDL_GetTicks();
-const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
+      Uint32 lastTick = SDL_GetTicks();
+     const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
 
 
     //boucle de jeu
@@ -127,77 +134,160 @@ const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
          */
 
        // Avancer le temps automatiquement toutes les 3 secondes
-    Uint32 now = SDL_GetTicks();
-    if (now - lastTick >= HOUR_DURATION)
-    {
+    
+
+     Uint32 now = SDL_GetTicks();
+     if (now - lastTick >= HOUR_DURATION)
+     {
         advanceOneHour(time); // avance d'une heure + mise à jour température
         lastTick = now;
-    }
+      }
         
-if(now - lastChange >=5000){
+     if(now - lastChange >= 5000){
             back =(back + 1) % 3 ;
             lastChange = now ;
         }
+         
+        
+
         //  IMGUI
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
+
+        
+         
         //fenetre translucide 
         ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
-        
-
         //afin de modifier la taille de la fenetre imgui 
         ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_Once);
 
-            ImGui::Begin("Controle meteo" , nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar);
-            
-          showstyle = true; 
+       /*ImGui::Begin("Controle meteo" , nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar);
+
+        showstyle = true; 
         if(showstyle){
             Drawstyle();
         }
         
-        
-        ImGui::End();
+          
+         ImGui::Separator();
+         ImGui::End();
+         ImGui::Render();
+*/
         
 
          SDL_RenderTexture(renderer, texture[back],nullptr , nullptr);
             
         // Deuxième fenêtre météo
-        //fenetre translucide 
+        //fenetre translucide  
         ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
-        
-
         //afin de modifier la taille de la fenetre imgui 
         ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
+
         ImGui::Begin("Météo" ,nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar);
 
         // Bouton pour avancer manuellement d'une heure
-        if (ImGui::Button("METEO"))
-            advanceOneHour(time);
+        if (ImGui::Button("##")){
 
-        // Affichage dynamique
+        
+            advanceOneHour(time);
+        // Affichage dynamique avec des polices
+        }
+         
+        
+        ImFont* font = io.Fonts->AddFontFromFileTTF("assets/police/RobotoSlab-VariableFont_wght.ttf");
+        ImGui::PushFont(font, 35.0f);
+
+        ImGui::Spacing();
+        ImGui::TextColored(
+        ImVec4(0.0f, 0.0f, 0.5f, 1.0f),
+        "Bienvenue dans la simulation météo ");
+        ImGui::Spacing();
+        ImGui::Separator();
+
+        ImGui::PushFont(font, 78.0f);
+        ImGui::Text(" %d °C", time.temperature);
+        ImGui::PopFont();
         ImGui::Text("Jour : %s", getDayName(time.dayIndex));
         ImGui::Text("Heure : %d h", time.hour);
-        ImGui::Text("Température : %d °C", time.temperature);
+        ImGui::PopFont();
+    
 
-        
-        
+        ImGui::Spacing();
+     //fenetre translucide 
+        ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
+        //afin de modifier la taille de la fenetre imgui 
+    ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
+    ImGui::Begin("Indicateurs Meteo"); // Fenêtre principale
+    
+    ImGui::BeginChild("Pluie", ImVec2(180, 80), true ); // Fenêtre pluie
+    ImGui::Text(" Pluie");
+    ImGui::Text("%d %%", stats.pluie);
+     ImGui::PopFont();
+    ImGui::EndChild();
+
+    ImGui::SameLine();
+   
+    ImGui::BeginChild("Humidite", ImVec2(180, 80), true); // Fenêtre humidité
+    ImGui::Text(" Humidite");
+    ImGui::Text("%d %%", stats.humidite);
+     ImGui::PopFont();
+    ImGui::EndChild();
+    
+
+    ImGui::BeginChild("Air", ImVec2(180, 80), true); // Fenêtre air
+    ImGui::Text(" Air");
+    ImGui::Text("%d %%", stats.air);
+     ImGui::PopFont();
+    ImGui::EndChild();
+
+    ImGui::SameLine();
+
+
+
+    ImGui::BeginChild("UV", ImVec2(180, 80), true); // Fenêtre UV
+    ImGui::Text("UV");
+    ImGui::Text("%d %%", stats.uv);
+     ImGui::PopFont();
+    ImGui::EndChild();
+    ImGui::End(); // Fin fenêtre principale
+    
+
+
          ImGui::Separator();
         ImGui::End();
          ImGui::Render();
 
         ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(),renderer);
         SDL_RenderPresent(renderer);
-    }    
+
+       }
+
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
     
-        
+
     //effface toutes les fenetres creer
     for(int i = 0 ; i<3 ; i++){
    SDL_DestroyTexture(texture[back]);
     }
+    if(texture[0]){
+        SDL_DestroyTexture(texture[0]);
+        texture[0] = nullptr;
+    }
+    if(texture[1]){
+        SDL_DestroyTexture(texture[1]);
+        texture[1] = nullptr;
+    }
+    
+    if(texture[2]){
+        SDL_DestroyTexture(texture[2]);
+        texture[2] = nullptr;
+    }
+    
+    
+    
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

@@ -1,5 +1,12 @@
 
 #include "../include/style.h"
+#include <SDL3/SDL.h>
+#include"../src/SDL3/SDL3_image/SDL_image.h"
+#include "../libs/stb/stb_image.h"
+#include "../libs/imgui/imgui.h"
+#include<vector>
+#include<iostream>
+
   /* cette fonction permet de gerer le style des boutons 
   *avec imgui
   */
@@ -10,6 +17,7 @@ enum WeatherView
     TIME,
     LOCATION
 };
+
  //fonction pour le style
 void Drawstyle()
 {

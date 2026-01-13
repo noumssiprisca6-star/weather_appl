@@ -2,6 +2,12 @@
 #define METEO_H
 
 #include <SDL3/SDL.h>
+#include <cstdlib>
+#include <ctime>
+#include "../libs/stb/stb_image.h"
+#include"../src/SDL3/SDL3_image/SDL_image.h"
+#include <iostream>
+#include<string>
 
 const int NB_JOURS = 5;
 
@@ -24,6 +30,8 @@ const char* getDayName(int dayIndex);
 
 // Générer la température pour cette tranche de 5 heures
 int getTemperatureForTranche(int hour);
+
+
 
 
 #endif
