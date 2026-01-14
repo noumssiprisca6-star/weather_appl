@@ -18,13 +18,18 @@
 
 
 // Sélection du fond selon la température
-SDL_Texture* choisirFond( float temperature,SDL_Texture* fondFroid,SDL_Texture* fondChaud ,SDL_Texture* fondNeige ,SDL_Texture* fondPluie ,SDL_Texture* fondNuit)
+SDL_Texture* choisirFond( float temperature,SDL_Texture* fondFroid,SDL_Texture* fondChaud ,SDL_Texture* fondNeige ,SDL_Texture* fondPluie  ,SDL_Texture* fondCrame)
 {
     
-    if (temperature < 0.0f){
+    if ( temperature <= 0.0f && temperature <= 5.0f){
         return fondNeige;//temps neigeux
-     } // Temps froid
-      return fondChaud;  // Temps chaud
+     }else if(temperature <= 15.0f && temperature <= 22.0f ){
+        return fondFroid; //temps froid 
+     }else if (temperature <= 24.0f && temperature <= 30.0f ){
+        return fondChaud; //temps chaud
+     }
+     // Temps froid
+      return fondCrame;  // Temps chaud
      
 }
 

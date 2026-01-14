@@ -102,9 +102,13 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
 
 
   // Chargement des fonds
-    SDL_Texture* fondFroid = chargerTexture(renderer, "assets/OIP (3).jpg");
-    SDL_Texture* fondChaud = chargerTexture(renderer, "assets/OIP (2).jpg");
-
+    SDL_Texture* fondFroid = chargerTexture(renderer, "assets/Rain.jpg");
+    SDL_Texture* fondChaud = chargerTexture(renderer, "assets/OIP (1).jpg");
+    SDL_Texture* fondNeige = chargerTexture(renderer, "assets/neige.jpg");
+    SDL_Texture* fondPluie = chargerTexture(renderer, "assets/ser.jpg");
+    SDL_Texture* fondCrame = chargerTexture(renderer, "assets/ml.jpg");
+    
+    
     Temperature temperature;
     initTemperature(temperature); // Init température
 
@@ -159,7 +163,11 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
         SDL_Texture* fondActuel = choisirFond(
             time.temperature,
             fondFroid,
-            fondChaud
+            fondChaud,
+            fondPluie,
+            fondCrame,
+            fondNeige
+
         );
 
         if (fondActuel){
@@ -219,7 +227,7 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
         ImGui::Spacing();
         ImGui::Separator();
 
-        ImGui::PushFont(font, 78.0f);
+        ImGui::PushFont(font, 85.0f);
         ImGui::Text(" %d °C", time.temperature);
         ImGui::PopFont();
         ImGui::Text("Jour : %s", getDayName(time.dayIndex));

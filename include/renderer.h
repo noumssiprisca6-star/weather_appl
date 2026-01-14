@@ -29,7 +29,7 @@ void drawMeteo(const MeteoStats& stats);
 
 
 // Sélection du fond selon la température
-SDL_Texture* choisirFond(float temperature ,SDL_Texture* fondFroid, SDL_Texture* fondChaud , SDL_Texture* fondNeige ,SDL_Texture* fondPluie ,SDL_Texture* fondNuit);
+SDL_Texture* choisirFond(float temperature ,SDL_Texture* fondFroid, SDL_Texture* fondChaud , SDL_Texture* fondNeige ,SDL_Texture* fondPluie ,SDL_Texture* fondCrame);
 
     
 #endif
