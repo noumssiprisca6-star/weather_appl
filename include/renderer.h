@@ -27,4 +27,5 @@ void updateMeteoStats(MeteoStats& stats, float deltaTime);
 // Dessine les fenêtres ImGui
 void drawMeteo(const MeteoStats& stats);
 
+
 #endif

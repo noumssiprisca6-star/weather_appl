@@ -19,7 +19,7 @@
 
   int main() {
     SetConsoleCP(CP_UTF8);
-    
+    std::srand(std::time(NULL));
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         std::cerr <<"Erreur SDL_Init: " << SDL_GetError() << std::endl;
     
@@ -96,8 +96,7 @@ if(Surface[2]){
 }
 
     MeteoStats stats;
-    initMeteoStats(stats); // Init stats météo
-
+   
 
     Uint64 lastChange = 0 ;
     int back = 0;
@@ -213,39 +212,40 @@ if(Surface[2]){
         ImGui::PopFont();
     
 
+        //deuxieme fenetre imgui 
         ImGui::Spacing();
      //fenetre translucide 
         ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
         //afin de modifier la taille de la fenetre imgui 
     ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
+    ImFont* style = io.Fonts->AddFontFromFileTTF("assets/police/ArchivoBlack-Regular.ttf");
+        ImGui::PushFont(style, 30.0f);
+
     ImGui::Begin("Indicateurs Meteo"); // Fenêtre principale
-    
-    ImGui::BeginChild("Pluie", ImVec2(180, 80), true ); // Fenêtre pluie
+    updateMeteoStats (stats ,12.0f);
+    ImGui::BeginChild("Pluie", ImVec2(180, 100), true ); // Fenêtre pluie
     ImGui::Text(" Pluie");
     ImGui::Text("%d %%", stats.pluie);
-     ImGui::PopFont();
     ImGui::EndChild();
 
     ImGui::SameLine();
    
-    ImGui::BeginChild("Humidite", ImVec2(180, 80), true); // Fenêtre humidité
+    ImGui::BeginChild("Humidité", ImVec2(180, 100), true); // Fenêtre humidité
     ImGui::Text(" Humidite");
     ImGui::Text("%d %%", stats.humidite);
-     ImGui::PopFont();
     ImGui::EndChild();
     
 
-    ImGui::BeginChild("Air", ImVec2(180, 80), true); // Fenêtre air
+    ImGui::BeginChild("Air", ImVec2(180, 100), true); // Fenêtre air
     ImGui::Text(" Air");
     ImGui::Text("%d %%", stats.air);
-     ImGui::PopFont();
     ImGui::EndChild();
 
     ImGui::SameLine();
 
 
 
-    ImGui::BeginChild("UV", ImVec2(180, 80), true); // Fenêtre UV
+    ImGui::BeginChild("Ultra V", ImVec2(180, 100), true); // Fenêtre UV
     ImGui::Text("UV");
     ImGui::Text("%d %%", stats.uv);
      ImGui::PopFont();
