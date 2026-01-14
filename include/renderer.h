@@ -24,12 +24,14 @@ void initMeteoStats(MeteoStats& stats);
 // Met à jour les stats de façon aléatoire
 void updateMeteoStats(MeteoStats& stats, float deltaTime);
 
-// Dessine les fenêtres ImGui
-void drawMeteo(const MeteoStats& stats);
+// fonction pour la nuit 
+
 
 
 // Sélection du fond selon la température
-SDL_Texture* choisirFond(float temperature ,SDL_Texture* fondFroid, SDL_Texture* fondChaud , SDL_Texture* fondNeige ,SDL_Texture* fondPluie ,SDL_Texture* fondCrame);
+SDL_Texture* choisirFond(float temperature ,SDL_Texture* fondFroid, SDL_Texture* fondChaud , SDL_Texture* fondNeige ,SDL_Texture* fondPluie ,SDL_Texture* fondCrame  );
 
     
+
+
 #endif

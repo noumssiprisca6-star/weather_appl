@@ -65,7 +65,7 @@ void advanceOneHour(MeteoTime& time)
     }
 
     // Mise à jour de la température toutes les 5 heures
-    if (time.hour % 4 == 0)
+    if (time.hour % 3 == 0)
     {
         time.temperature = getTemperatureForTranche(time.hour);
     }
@@ -86,9 +86,10 @@ void updateTemperature(Temperature& t, float deltaTime)
 {
     t.timer += deltaTime; // Avance le temps
 
-    if (t.timer >= 5000)  // Toutes les 5 secondes
+    if (t.timer >= 4000)  // Toutes les 5 secondes
     {
         t.timer = 0.0f;   // Reset timer
         t.valeur = (float)(rand() % 46 - 5); // -5 à 40
     }
 }
+ 

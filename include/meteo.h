@@ -47,6 +47,4 @@ void initTemperature(Temperature& t);
 void updateTemperature(Temperature& t, float deltaTime);
 
 
-
-
 #endif

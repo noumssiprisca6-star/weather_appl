@@ -24,8 +24,10 @@ SDL_Texture* chargerTexture(SDL_Renderer* renderer, const char* chemin)
     if (!surface) return NULL;
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Texture* nuit =  SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface); // Libère surface
     return texture;
+
 }
 
 
@@ -75,6 +77,8 @@ SDL_Texture* chargerTexture(SDL_Renderer* renderer, const char* chemin)
              //les booleens
              bool showstyle = false ;
              bool icon = false ;
+              bool fond = false ;
+              bool fonf = false ;
         
    
 
@@ -107,6 +111,8 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
     SDL_Texture* fondNeige = chargerTexture(renderer, "assets/neige.jpg");
     SDL_Texture* fondPluie = chargerTexture(renderer, "assets/ser.jpg");
     SDL_Texture* fondCrame = chargerTexture(renderer, "assets/ml.jpg");
+    SDL_Texture* fondNuit = chargerTexture(renderer, "assets/pl.jpg");
+    
     
     
     Temperature temperature;
@@ -123,6 +129,7 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
 
 
         //boucle de jeu
+       
       bool running = true;
        SDL_Event event;
  //boule d'evenement
@@ -167,9 +174,15 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
             fondPluie,
             fondCrame,
             fondNeige
-
+         
         );
 
+         if(fond){
+            fondActuel = fondNuit ;
+         }else if (fonf){
+            fondActuel = fondActuel ;
+         }
+           
         if (fondActuel){
             SDL_RenderTexture(renderer, fondActuel, NULL, NULL); // Affiche fond
         }
@@ -218,7 +231,7 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
          
         
         ImFont* font = io.Fonts->AddFontFromFileTTF("assets/police/RobotoSlab-VariableFont_wght.ttf");
-        ImGui::PushFont(font, 35.0f);
+        ImGui::PushFont(font, 40.0f);
 
         ImGui::Spacing();
         ImGui::TextColored(
@@ -232,8 +245,22 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
         ImGui::PopFont();
         ImGui::Text("Jour : %s", getDayName(time.dayIndex));
         ImGui::Text("Heure : %d h", time.hour);
+
+       // le jour de 6h à 18
+        if(time.hour >= 23 || time.hour <=18) { 
+            fonf = true ;
+            fond = false ;
+        ImGui::Text("JOUR") ;
+
+         }else{// checkbox cest pour les bouton avec booleen & booleen
+            fonf = false;
+            fond= true ;
+         ImGui::Text("NUIT" );
+        } 
+          ImGui::Spacing();  
+        
         ImGui::PopFont();
-    SDL_RenderTexture(renderer, fondActuel, NULL, NULL); // Affiche fond
+     SDL_RenderTexture(renderer, fondActuel, NULL, NULL); // Affiche fond
 
         //deuxieme fenetre imgui 
         ImGui::Spacing();
@@ -276,16 +303,13 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
     ImGui::End(); // Fin fenêtre principale
      
            
-        
-   
-
 
          ImGui::Separator();
-        ImGui::End();
+         ImGui::End();
          ImGui::Render();
  
-        ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(),renderer);
-        SDL_RenderPresent(renderer);
+    ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(),renderer);
+    SDL_RenderPresent(renderer);
 
        }
 
@@ -309,47 +333,3 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
 
 
 }
-/* SDL_Surface* Surface[3]; 
-Surface[0] = IMG_Load("assets/ml.jpg");
-Surface[1] = IMG_Load("assets/ui.jpg"); 
-Surface[2] = IMG_Load("assets/ser.jpg");
-//creation de la texture à partir de la surface 
-SDL_Texture* texture[3] ;
-for(int i = 0 ; i<3 ; i++){
-texture[i] = SDL_CreateTextureFromSurface(renderer , Surface[i]);
-} 
-//destruction de la surface creer 
-
-if(Surface[0]){
-    SDL_DestroySurface(Surface[0]);
-    Surface[0]= nullptr;
-
-}
-if(Surface[1]){
-    SDL_DestroySurface(Surface[1]);
-    Surface[1]= nullptr;
-}
-if(Surface[2]){
-    SDL_DestroySurface(Surface[2]);
-    Surface[2]= nullptr;
-
-}*/
-/*  for(int i = 0 ; i<3 ; i++){
-   SDL_DestroyTexture(texture[back]);
-    }
-    if(texture[0]){
-        SDL_DestroyTexture(texture[0]);
-        texture[0] = nullptr;
-    }
-    if(texture[1]){
-        SDL_DestroyTexture(texture[1]);
-        texture[1] = nullptr;
-    }
-    
-    if(texture[2]){
-        SDL_DestroyTexture(texture[2]);
-        texture[2] = nullptr;
-    }
-    
-    
-    */

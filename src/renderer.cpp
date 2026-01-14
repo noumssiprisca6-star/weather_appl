@@ -18,20 +18,21 @@
 
 
 // Sélection du fond selon la température
-SDL_Texture* choisirFond( float temperature,SDL_Texture* fondFroid,SDL_Texture* fondChaud ,SDL_Texture* fondNeige ,SDL_Texture* fondPluie  ,SDL_Texture* fondCrame)
+SDL_Texture* choisirFond( float temperature,SDL_Texture* fondFroid,SDL_Texture* fondChaud ,SDL_Texture* fondNeige ,SDL_Texture* fondPluie  ,SDL_Texture* fondCrame )
 {
     
     if ( temperature <= 0.0f && temperature <= 5.0f){
         return fondNeige;//temps neigeux
      }else if(temperature <= 15.0f && temperature <= 22.0f ){
         return fondFroid; //temps froid 
-     }else if (temperature <= 24.0f && temperature <= 30.0f ){
+     }else if (temperature >= 24.0f && temperature <= 30.0f ){
         return fondChaud; //temps chaud
      }
      // Temps froid
       return fondCrame;  // Temps chaud
      
 }
+
 
 // Initialise les valeurs
 void initMeteoStats(MeteoStats& stats)
@@ -60,49 +61,3 @@ void updateMeteoStats(MeteoStats& stats, float deltaTime)
 }
 
 // Dessine les fenêtres enfants ImGui
-void drawMeteo(const MeteoStats& stats)
-{
-    
-        
-     ImGuiIO& io = ImGui::GetIO();
-    ImFont* font = io.Fonts->AddFontFromFileTTF("assets/police/RobotoSlab-VariableFont_wght.ttf");
-    ImGui::PushFont(font, 35.0f);
-    ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
-
-    ImGui::Begin("Indicateurs Meteo"); // Fenêtre principale
-    
-    ImGui::BeginChild("Pluie", ImVec2(180, 80), true ); // Fenêtre pluie
-    ImGui::Text(" Pluie");
-    ImGui::Text("%d %%", stats.pluie);
-    ImGui::EndChild();
-
-    ImGui::SameLine();
-   
-    ImGui::BeginChild("Humidite", ImVec2(180, 80), true); // Fenêtre humidité
-    ImGui::Text("Humidite");
-    ImGui::Text("%d %%", stats.humidite);
-    ImGui::EndChild();
-    
-
-    ImGui::BeginChild("Air", ImVec2(180, 80), true); // Fenêtre air
-    ImGui::Text(" Air");
-    ImGui::Text("%d %%", stats.air);
-    ImGui::EndChild();
-
-    ImGui::SameLine();
-
-
-
-    ImGui::BeginChild("UV", ImVec2(180, 80), true); // Fenêtre UV
-    ImGui::Text("UV");
-    ImGui::Text("%d %%", stats.uv);
-    ImGui::EndChild();
-    ImGui::PopFont();
-    ImGui::End(); // Fin fenêtre principale
-    
-}
-
-
-
-
- 
