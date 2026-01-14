@@ -1,4 +1,5 @@
 #include"../include/renderer.h"
+#include "../include/meteo.h"
 #include <SDL3/SDL.h>
 #include"../src/SDL3/SDL3_image/SDL_image.h"
 #include "../libs/stb/stb_image.h"
@@ -7,6 +8,25 @@
 #include<iostream>
 #include<vector>
 #include <cstdlib>
+
+
+
+
+
+
+
+
+
+// Sélection du fond selon la température
+SDL_Texture* choisirFond( float temperature,SDL_Texture* fondFroid,SDL_Texture* fondChaud ,SDL_Texture* fondNeige ,SDL_Texture* fondPluie ,SDL_Texture* fondNuit)
+{
+    
+    if (temperature < 0.0f){
+        return fondNeige;//temps neigeux
+     } // Temps froid
+      return fondChaud;  // Temps chaud
+     
+}
 
 // Initialise les valeurs
 void initMeteoStats(MeteoStats& stats)
@@ -81,37 +101,3 @@ void drawMeteo(const MeteoStats& stats)
 
 
  
-//Fonction pour charger une image avec stb_image
-/*SDL_Texture* LoadImageTexture(SDL_Renderer* renderer, const char* icon) { 
-int width, height, channels; 
-// Charge l'image en mémoire 
-unsigned char* image_data = stbi_load(icon, &width, &height, &channels, 
-4); // Force RGBA 
-if (!image_data) { 
-std::cerr << "Erreur stb_image: " << stbi_failure_reason() << 
-std::endl; 
-return nullptr; 
-    } 
-std::cout << "Image chargée: " << width << "x" << height  
-              << 
-" (" << channels << " canaux)" << std::endl; 
-// Crée une texture SDL 
-    SDL_Texture* texture = SDL_CreateTexture( 
-        renderer, 
-        SDL_PIXELFORMAT_RGBA32, 
-        SDL_TEXTUREACCESS_STATIC, 
-        width, height 
-    ); 
-if (!texture) { 
-std::cerr << "Erreur création texture: " << SDL_GetError() << std::endl;
-        stbi_image_free(image_data); 
-return nullptr; 
-    } 
-// Copie les pixels dans la texture 
-    SDL_UpdateTexture(texture, nullptr, image_data, width * 4); 
-// Libère la mémoire de stb_image
-    stbi_image_free(image_data); 
-return texture; 
-} 
-*/
-

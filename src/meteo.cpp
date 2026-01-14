@@ -72,3 +72,23 @@ void advanceOneHour(MeteoTime& time)
     
 }
 
+
+
+// Initialise la température
+void initTemperature(Temperature& t)
+{
+    t.valeur = 15.0f; // Température de départ
+    t.timer = 0.0f;   // Timer à zéro
+}
+
+// Met à jour la température toutes les 5 secondes
+void updateTemperature(Temperature& t, float deltaTime)
+{
+    t.timer += deltaTime; // Avance le temps
+
+    if (t.timer >= 5000)  // Toutes les 5 secondes
+    {
+        t.timer = 0.0f;   // Reset timer
+        t.valeur = (float)(rand() % 46 - 5); // -5 à 40
+    }
+}

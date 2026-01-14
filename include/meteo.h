@@ -33,5 +33,20 @@ int getTemperatureForTranche(int hour);
 
 
 
+// Structure température
+struct Temperature
+{
+    float valeur;      // Température actuelle
+    float timer;       // Timer interne
+};
+
+// Initialise la température
+void initTemperature(Temperature& t);
+
+// Met à jour la température toutes les 5 secondes
+void updateTemperature(Temperature& t, float deltaTime);
+
+
+
 
 #endif

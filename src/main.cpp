@@ -17,6 +17,18 @@
 
 
 
+// Charge une texture BMP
+SDL_Texture* chargerTexture(SDL_Renderer* renderer, const char* chemin)
+{
+    SDL_Surface* surface = IMG_Load(chemin); // Charge image
+    if (!surface) return NULL;
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_DestroySurface(surface); // Libère surface
+    return texture;
+}
+
+
   int main() {
     SetConsoleCP(CP_UTF8);
     std::srand(std::time(NULL));
@@ -66,44 +78,35 @@
         
    
 
-     //variable de la boucle principale
+     
        //variable de la boucle principale
    // creation de la surface pour mon fond
-SDL_Surface* Surface[3]; 
-Surface[0] = IMG_Load("assets/ml.jpg");
-Surface[1] = IMG_Load("assets/ui.jpg"); 
-Surface[2] = IMG_Load("assets/ser.jpg");
+   // Charge une texture BMP
+
+
+
+SDL_Surface* Surface = IMG_Load("assets/bn.jpg");
+
 //creation de la texture à partir de la surface 
-SDL_Texture* texture[3] ;
-for(int i = 0 ; i<3 ; i++){
-texture[i] = SDL_CreateTextureFromSurface(renderer , Surface[i]);
-} 
-//destruction de la surface creer 
+SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
 
-if(Surface[0]){
-    SDL_DestroySurface(Surface[0]);
-    Surface[0]= nullptr;
-
-}
-if(Surface[1]){
-    SDL_DestroySurface(Surface[1]);
-    Surface[1]= nullptr;
-}
-if(Surface[2]){
-    SDL_DestroySurface(Surface[2]);
-    Surface[2]= nullptr;
-
-}
+//destruction de la surface creer
+    SDL_DestroySurface(Surface);
+    
 
     MeteoStats stats;
    
 
     Uint64 lastChange = 0 ;
-    int back = 0;
+    
 
 
+  // Chargement des fonds
+    SDL_Texture* fondFroid = chargerTexture(renderer, "assets/OIP (3).jpg");
+    SDL_Texture* fondChaud = chargerTexture(renderer, "assets/OIP (2).jpg");
 
-
+    Temperature temperature;
+    initTemperature(temperature); // Init température
 
  
     // Initialisation météo
@@ -115,10 +118,10 @@ if(Surface[2]){
      const Uint32 HOUR_DURATION = 2000; // 3000 ms = 3 secondes
 
 
-    //boucle de jeu
-    bool running = true;
-    SDL_Event event;
-
+        //boucle de jeu
+      bool running = true;
+       SDL_Event event;
+ //boule d'evenement
     while (running) {
         while (SDL_PollEvent(&event)) {
             ImGui_ImplSDL3_ProcessEvent(&event);
@@ -142,13 +145,26 @@ if(Surface[2]){
         lastTick = now;
       }
         
-     if(now - lastChange >= 5000){
-            back =(back + 1) % 3 ;
-            lastChange = now ;
-        }
+     
          
         
 
+
+       //fonction pour modifier la temperature
+        updateTemperature(temperature, 10.0f); // Update température
+
+        SDL_RenderClear(renderer); // Nettoyage écran
+
+        // Choix du fond synchronisé avec la température
+        SDL_Texture* fondActuel = choisirFond(
+            time.temperature,
+            fondFroid,
+            fondChaud
+        );
+
+        if (fondActuel){
+            SDL_RenderTexture(renderer, fondActuel, NULL, NULL); // Affiche fond
+        }
         //  IMGUI
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
@@ -175,7 +191,6 @@ if(Surface[2]){
 */
         
 
-         SDL_RenderTexture(renderer, texture[back],nullptr , nullptr);
             
         // Deuxième fenêtre météo
         //fenetre translucide  
@@ -210,7 +225,7 @@ if(Surface[2]){
         ImGui::Text("Jour : %s", getDayName(time.dayIndex));
         ImGui::Text("Heure : %d h", time.hour);
         ImGui::PopFont();
-    
+    SDL_RenderTexture(renderer, fondActuel, NULL, NULL); // Affiche fond
 
         //deuxieme fenetre imgui 
         ImGui::Spacing();
@@ -220,7 +235,7 @@ if(Surface[2]){
     ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
     ImFont* style = io.Fonts->AddFontFromFileTTF("assets/police/ArchivoBlack-Regular.ttf");
         ImGui::PushFont(style, 30.0f);
-
+ 
     ImGui::Begin("Indicateurs Meteo"); // Fenêtre principale
     updateMeteoStats (stats ,12.0f);
     ImGui::BeginChild("Pluie", ImVec2(180, 100), true ); // Fenêtre pluie
@@ -248,16 +263,19 @@ if(Surface[2]){
     ImGui::BeginChild("Ultra V", ImVec2(180, 100), true); // Fenêtre UV
     ImGui::Text("UV");
     ImGui::Text("%d %%", stats.uv);
-     ImGui::PopFont();
+    ImGui::PopFont();
     ImGui::EndChild();
     ImGui::End(); // Fin fenêtre principale
-    
+     
+           
+        
+   
 
 
          ImGui::Separator();
         ImGui::End();
          ImGui::Render();
-
+ 
         ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(),renderer);
         SDL_RenderPresent(renderer);
 
@@ -269,7 +287,46 @@ if(Surface[2]){
     
 
     //effface toutes les fenetres creer
-    for(int i = 0 ; i<3 ; i++){
+    // Libération ressources
+    SDL_DestroyTexture(fondFroid);
+    SDL_DestroyTexture(fondChaud);
+
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    std::cout << " sayonara! " << std::endl;
+    return 0;
+
+
+}
+/* SDL_Surface* Surface[3]; 
+Surface[0] = IMG_Load("assets/ml.jpg");
+Surface[1] = IMG_Load("assets/ui.jpg"); 
+Surface[2] = IMG_Load("assets/ser.jpg");
+//creation de la texture à partir de la surface 
+SDL_Texture* texture[3] ;
+for(int i = 0 ; i<3 ; i++){
+texture[i] = SDL_CreateTextureFromSurface(renderer , Surface[i]);
+} 
+//destruction de la surface creer 
+
+if(Surface[0]){
+    SDL_DestroySurface(Surface[0]);
+    Surface[0]= nullptr;
+
+}
+if(Surface[1]){
+    SDL_DestroySurface(Surface[1]);
+    Surface[1]= nullptr;
+}
+if(Surface[2]){
+    SDL_DestroySurface(Surface[2]);
+    Surface[2]= nullptr;
+
+}*/
+/*  for(int i = 0 ; i<3 ; i++){
    SDL_DestroyTexture(texture[back]);
     }
     if(texture[0]){
@@ -287,13 +344,4 @@ if(Surface[2]){
     }
     
     
-    
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    std::cout << " sayonara! " << std::endl;
-    return 0;
-
-
-}
+    */
