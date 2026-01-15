@@ -17,6 +17,11 @@ struct MeteoTime
     int hour;        // 0-23
     int dayIndex;    // 0 = Lundi, ... 4 = Vendredi
     int temperature; // température actuelle
+     int pluie  ;  // quantite de pluie
+    int humidite ;// quqntite d'humidite 
+    int vent  ;  // quantite d'air
+    int uv     ;     // quantite de rayon ultra violet
+    float timer ;
 };
 
 // Initialisation
@@ -30,8 +35,10 @@ const char* getDayName(int dayIndex);
 
 // Générer la température pour cette tranche de 5 heures
 int getTemperatureForTranche(int hour);
+//fonction pour gerer les facteurs 
+void gestion (MeteoTime& time);
 
-
+void updateMeteotime(MeteoTime& time, float deltaTime) ;
 
 // Structure température
 struct Temperature
