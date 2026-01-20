@@ -30,6 +30,7 @@ SDL_Texture* chargerTexture(SDL_Renderer* renderer, const char* chemin)
 
 }
 
+  
 
   int main() {
     SetConsoleCP(CP_UTF8);
@@ -112,13 +113,20 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
     SDL_Texture* fondNuit = chargerTexture(renderer, "assets/pl.jpg");
     SDL_Texture* fondnuage = chargerTexture(renderer, "assets/OIP (2).jpg");
     SDL_Texture* fondtour = chargerTexture(renderer, "assets/ji.jpg");
-    SDL_Texture* fondbrou = chargerTexture(renderer, "assets/OIP (8).jpg");
+    SDL_Texture* fondbrou = chargerTexture(renderer, "assets/OIP.jpg");
     SDL_Texture* fondflocon = chargerTexture(renderer, "assets/flocon.jpg");
     SDL_Texture* fondcoucher = chargerTexture(renderer, "assets/soend.jpg");
+    
 
-    
-    
-    
+    // chargement des icons
+    SDL_Texture* iconpluie = changerIcon(renderer , "assets/yt.png ");
+    SDL_Texture* iconnuit = changerIcon(renderer , "assets/nig.png ");
+    SDL_Texture* iconjour = changerIcon(renderer , "assets/td.png ");
+    SDL_Texture* iconcoucher = changerIcon(renderer , "assets/tel.png ");
+    SDL_Texture* iconuv = changerIcon(renderer,"assets/rayo.png");
+    SDL_Texture* iconhum = changerIcon(renderer, "assets/hum.png");
+    SDL_Texture* iconvent = changerIcon(renderer, "assets/com.png");
+
     Temperature temperature;
     initTemperature(temperature); // Init température
 
@@ -269,6 +277,7 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
            if (coucher){
             fondActuel = fondcoucher;
           }
+          ImGui:: Image((void*)iconcoucher ,ImVec2(40,40));
            ImGui ::Text("coucher de soleil");
           }
         
@@ -278,6 +287,7 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
             fonf = true ;
             fond = false ;
             coucher = false ;
+            ImGui:: Image((void*)iconjour ,ImVec2(40,40));
         ImGui::Text("JOUR") ;
 
          }else{
@@ -285,7 +295,9 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
             fonf = false;
             coucher = false ;
             fond = true ;
-         ImGui::Text("NUIT" );
+            ImGui:: Image((void*)iconnuit ,ImVec2(40,40));
+            ImGui::Text("NUIT" );
+          
         } 
        
           ImGui::Spacing();  
@@ -305,20 +317,23 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
   
     ImGui::Begin("Indicateurs Meteo"); // Fenêtre principale
     
-    ImGui::BeginChild("Pluie", ImVec2(180, 100), true ); // Fenêtre pluie
+    ImGui::BeginChild("Pluie", ImVec2(190, 130), true ); // Fenêtre pluie
+    ImGui:: Image((void*)iconpluie ,ImVec2(40,40));
     ImGui::Text(" Pluie");
     ImGui::Text("%d %%", time.pluie);
     ImGui::EndChild();
 
     ImGui::SameLine();
    
-    ImGui::BeginChild("Humidité", ImVec2(180, 100), true); // Fenêtre humidité
+    ImGui::BeginChild("Humidité", ImVec2(190, 130), true); // Fenêtre humidité
+    ImGui:: Image((void*)iconhum ,ImVec2(40,40));
     ImGui::Text(" Humidité");
     ImGui::Text("%d %%", time.humidite);
     ImGui::EndChild();
     
 
-    ImGui::BeginChild("Vent", ImVec2(180, 100), true); // Fenêtre air
+    ImGui::BeginChild("Vent", ImVec2(190, 130), true); // Fenêtre air
+    ImGui:: Image((void*)iconvent ,ImVec2(40,40));
     ImGui::Text(" Vent");
     ImGui::Text("%d %%", time.vent);
     ImGui::EndChild();
@@ -327,7 +342,8 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
 
 
 
-    ImGui::BeginChild("Ultra V", ImVec2(180, 100), true); // Fenêtre UV
+    ImGui::BeginChild("Ultra V", ImVec2(190, 130), true); // Fenêtre UV
+    ImGui:: Image((void*)iconuv ,ImVec2(40,40));
     ImGui::Text("UV");
     ImGui::Text("%d %%", time.uv);
     ImGui::PopFont();
@@ -354,6 +370,23 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
     // Libération ressources
     SDL_DestroyTexture(fondFroid);
     SDL_DestroyTexture(fondChaud);
+    SDL_DestroyTexture(fondPluie);
+    SDL_DestroyTexture(fondCrame);
+    SDL_DestroyTexture(fondCrame);
+    SDL_DestroyTexture( fondNeige);
+    SDL_DestroyTexture( fondeclairs);
+    SDL_DestroyTexture( fondnuage );
+    SDL_DestroyTexture(fondtour);
+    SDL_DestroyTexture ( fondbrou) ;
+    SDL_DestroyTexture (fondflocon);
+    SDL_DestroyTexture(iconpluie);
+    SDL_DestroyTexture(iconnuit);
+    SDL_DestroyTexture(iconcoucher);
+    SDL_DestroyTexture(iconjour);
+    SDL_DestroyTexture(iconuv);
+    SDL_DestroyTexture(iconhum);
+    SDL_DestroyTexture(iconvent);
+
 
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);

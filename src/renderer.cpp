@@ -36,3 +36,17 @@ SDL_Texture* choisirFond( const MeteoTime& time,SDL_Texture* fondFroid,SDL_Textu
       return fondCrame;  // Temps chaud
      }
 }
+//pour charger des icones
+ // Charge une texture BMP
+SDL_Texture* changerIcon(SDL_Renderer* renderer, const char* icon)
+{
+    SDL_Surface* surface = IMG_Load(icon); // Charge image
+    if (!surface) return NULL;
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Texture* nuit =  SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_DestroySurface(surface); // Libère surface
+    return texture;
+
+}
+  
