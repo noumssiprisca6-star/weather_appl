@@ -15,6 +15,7 @@ SDL_Texture* choisirFond( const MeteoTime& time ,SDL_Texture* fondFroid, SDL_Tex
 // Structure pour le temps
 
    SDL_Texture* changerIcon(SDL_Renderer* renderer, const char* icon);
+   
 
 
 #endif

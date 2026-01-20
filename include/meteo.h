@@ -17,7 +17,7 @@ struct MeteoTime
     int hour;        // 0-23
     int dayIndex;    // 0 = Lundi, ... 4 = Vendredi
     int temperature; // température actuelle
-     int pluie  ;  // quantite de pluie
+    int pluie  ;  // quantite de pluie
     int humidite ;// quqntite d'humidite 
     int vent  ;  // quantite d'air
     int uv     ;     // quantite de rayon ultra violet
@@ -47,11 +47,20 @@ struct Temperature
     float timer;       // Timer interne
 };
 
+//structure pour gerer l'etat
+enum Etat{
+    Nuageux,
+    Neigeux ,
+    Ensolleille , 
+    Canicule 
+
+};
 // Initialise la température
 void initTemperature(Temperature& t);
 
 // Met à jour la température toutes les 5 secondes
 void updateTemperature(Temperature& t, float deltaTime);
-
+ //pour gerer les messages d'etat
+ Etat etat(const MeteoTime& time);
 
 #endif

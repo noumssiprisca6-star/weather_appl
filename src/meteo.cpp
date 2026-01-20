@@ -146,3 +146,16 @@ void gestion (MeteoTime& time){
 
 
 }
+
+//fonction pour gerer les etats 
+ Etat  etat ( const MeteoTime& time){
+    if(time.temperature <= 10){
+        return Neigeux ;
+    }else if( time.temperature <= 22){
+        return Nuageux ;
+    }else if (time.temperature <= 32){
+        return Ensolleille;
+    }else{
+        return Canicule;
+    }
+ }
