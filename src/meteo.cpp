@@ -151,11 +151,14 @@ void gestion (MeteoTime& time){
  Etat  etat ( const MeteoTime& time){
     if(time.temperature <= 10){
         return Neigeux ;
-    }else if( time.temperature <= 22){
+    }else if( time.temperature <= 29){
         return Nuageux ;
-    }else if (time.temperature <= 32){
+    }else if (time.temperature <= 35){
+      return Leger_Soleil ;
+    }else if (time.temperature <= 38 ){
         return Ensolleille;
     }else{
         return Canicule;
     }
+ 
  }

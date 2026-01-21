@@ -52,7 +52,8 @@ enum Etat{
     Nuageux,
     Neigeux ,
     Ensolleille , 
-    Canicule 
+    Canicule ,
+    Leger_Soleil,
 
 };
 // Initialise la température
