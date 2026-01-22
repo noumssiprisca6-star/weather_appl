@@ -157,8 +157,10 @@ void gestion (MeteoTime& time){
       return Leger_Soleil ;
     }else if (time.temperature <= 38 ){
         return Ensolleille;
+   
     }else{
         return Canicule;
     }
- 
+  
  }
+ 

@@ -54,8 +54,9 @@ enum Etat{
     Ensolleille , 
     Canicule ,
     Leger_Soleil,
-
+   
 };
+
 // Initialise la température
 void initTemperature(Temperature& t);
 

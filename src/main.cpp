@@ -81,7 +81,8 @@ SDL_Texture* chargerTexture(SDL_Renderer* renderer, const char* chemin)
     bool fond = false ;
     bool fonf = false ;
     bool coucher = false ;  
-   
+    bool lever = false ;
+    bool couchersoleil = false ;
 
      
        //variable de la boucle principale
@@ -130,8 +131,8 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
     SDL_Texture* iconsoleil = changerIcon(renderer , "assets/bv.png");
     SDL_Texture* iconsun = changerIcon(renderer ,"assets/ico.png");
     SDL_Texture* iconnuage = changerIcon(renderer , "assets/cloud.png");
-    SDL_Texture* iconensol = changerIcon(renderer , "asssets/sun.png");
-
+    SDL_Texture* iconensol = changerIcon(renderer , "asssets/tel.png");
+    SDL_Texture* iconlev = changerIcon(renderer , "assets/ytu.png");
 
 
     Temperature temperature;
@@ -319,11 +320,11 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
         ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
         //afin de modifier la taille de la fenetre imgui 
 
-    ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(900, 700), ImGuiCond_Once);
     ImFont* style = io.Fonts->AddFontFromFileTTF("assets/police/ArchivoBlack-Regular.ttf");
     ImGui::PushFont(style, 30.0f);
   
-    ImGui::Begin("Indicateurs Meteo" ,nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoBackground ); // Fenêtre principale
+    ImGui::Begin("Indicateurs Meteo" ,nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoBackground  ); // Fenêtre principale
     
     ImGui::BeginChild("Pluie", ImVec2(190, 130), false); // Fenêtre pluie
     ImGui:: Image((void*)iconpluie ,ImVec2(50,50));
@@ -338,9 +339,9 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
     ImGui::Text(" Humidité");
     ImGui::Text("%d %%", time.humidite);
     ImGui::EndChild();
-    
-    
 
+    ImGui::SameLine();
+    
     ImGui::BeginChild("Vent", ImVec2(190, 130), false); // Fenêtre air
     ImGui:: Image((void*)iconvent ,ImVec2(40,40));
     ImGui::Text(" Vent");
@@ -349,21 +350,35 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
 
     ImGui::SameLine();
 
-       //fenetre translucide  
-        ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
-        //afin de modifier la taille de la fenetre imgui 
-        ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
+    //fenetre translucide  
+    ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
+     //afin de modifier la taille de la fenetre imgui 
+    ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
 
-    ImGui::BeginChild("Ultra V", ImVec2(190, 130), false); // Fenêtre UV
+    ImGui::BeginChild("Ultra V", ImVec2(250, 180), false); // Fenêtre UV
     ImGui:: Image((void*)iconuv ,ImVec2(50,50));
     ImGui::Text("UV");
     ImGui::Text("%d %%", time.uv);
-    
     ImGui::EndChild();
+
+     
+    ImGui::BeginChild("Lever de soleil", ImVec2(270, 100), false); // Fenêtre humidité
+    ImGui::Image((void*)iconlev ,ImVec2(40,40));
+    ImGui::TextColored(ImVec4(0.9f, 0.95f , 1.0f , 1.0f) , "lever de soleil: 6h ");
+    ImGui::EndChild();
+
+
+
+    ImGui::BeginChild("coucher de soleil", ImVec2(340, 280), false); // Fenêtre humidité
+    ImGui:: Image((void*)iconjour ,ImVec2(40,40));
+    ImGui::TextColored(ImVec4(0.9f, 0.95f , 1.0f , 1.0f) ,"coucher de soleil: 18h ");
+    ImGui::EndChild();
+
     ImGui::End(); // Fin fenêtre principale
     
     // pour afficher un message
-    ImGui::Begin("message" ,nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoBackground)  ; //fenetre texte
+    ImGui::Begin("message" ,nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoBackground )  ; //fenetre texte
+
     ImGui::Text("Etat Actuel ");
     switch(etat(time)){
 
@@ -391,11 +406,13 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
 
       case Canicule :
  
-      ImGui :: TextColored(ImVec4(0.9f , 0.2f ,0.2f ,1.0f) , "CANICULE");
+    ImGui :: TextColored(ImVec4(0.9f , 0.2f ,0.2f ,1.0f) , "CANICULE");
     ImGui:: Image((void*)iconsun,ImVec2(50,50));
       break;
-      
+    
+
     }
+   
     ImGui::PopFont();
     ImGui::End();
   
@@ -440,6 +457,7 @@ SDL_Texture* texture  = SDL_CreateTextureFromSurface(renderer , Surface);
     SDL_DestroyTexture(iconsun);
     SDL_DestroyTexture(iconnuage);
     SDL_DestroyTexture(iconensol);
+    SDL_DestroyTexture(iconlev);
 
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
