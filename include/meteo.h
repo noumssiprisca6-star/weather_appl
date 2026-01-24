@@ -10,15 +10,17 @@
 #include<string>
 
 const int NB_JOURS = 5;
+const int NB_REGION = 10 ;
 
 // Structure pour le temps
 struct MeteoTime
 {
     int hour;        // 0-23
     int dayIndex;    // 0 = Lundi, ... 4 = Vendredi
+    int chefregion;
     int temperature; // température actuelle
     int pluie  ;  // quantite de pluie
-    int humidite ;// quqntite d'humidite 
+    int humidite ;// quantite d'humidite 
     int vent  ;  // quantite d'air
     int uv     ;     // quantite de rayon ultra violet
     float timer ;
@@ -32,6 +34,8 @@ void advanceOneHour(MeteoTime& time);
 
 // Nom du jour
 const char* getDayName(int dayIndex);
+//nom des regions
+const char* changelieu();
 
 // Générer la température pour cette tranche de 5 heures
 int getTemperatureForTranche(int hour);
@@ -62,7 +66,11 @@ void initTemperature(Temperature& t);
 
 // Met à jour la température toutes les 5 secondes
 void updateTemperature(Temperature& t, float deltaTime);
+
  //pour gerer les messages d'etat
  Etat etat(const MeteoTime& time);
 
+ //changer de lieu
+void chefLieux();
+ 
 #endif

@@ -19,6 +19,7 @@ void initTime(MeteoTime& time)
     std::srand(std::time(NULL)); // initialiser rand
     time.hour = 6;       // début à 6h
     time.dayIndex = 0;   // 0 = Lundi
+    time.chefregion = 0 ;
     time.temperature = getTemperatureForTranche(time.hour);
     time.pluie = std:: rand() % 100 + 1;      // 0 à 99
     time.humidite = std :: rand() % 100;   // 0 à 99
@@ -30,11 +31,42 @@ void initTime(MeteoTime& time)
 
 const char* getDayName(int dayIndex)
 {
-     const char* days[NB_JOURS] = {"Lundi","Mardi","Mercredi","Jeudi","Vendredi"};
+    
+    const char* days[NB_JOURS] = {"Lundi","Mardi","Mercredi","Jeudi","Vendredi"};
     return days[dayIndex];
 }
 
+//pour changer les chef lieu
+const char * Region[NB_REGION] = {
+    "Yaounde",
+    "Douala",
+    "Bafoussam",
+    "Bamenda" ,
+    "Garoua",
+    "Ngaoundere",
+    "Maroua",
+    "Ebolowa",
+    "Bertoua",
+    "Buea",
+}; 
 
+ int chefregion;
+ Uint64 dernierchangement;
+
+void chefLieux(){
+     Uint64 maintenant =SDL_GetTicks();
+     if(maintenant - dernierchangement >= 6000 ){
+        chefregion = (chefregion + 1)% NB_REGION ;
+        dernierchangement = maintenant;
+     }
+       
+    }
+    
+
+
+ const char* changelieu(){
+ return Region[chefregion];
+ }
 // Température par tranche de 5h
 
 int getTemperatureForTranche(int hour)
@@ -69,14 +101,13 @@ void advanceOneHour(MeteoTime& time)
             time.dayIndex = 0;
     }
 
-    // Mise à jour de la température toutes les 5 heures
+    // Mise à jour de la température toutes les 3 heures
     if (time.hour % 3 == 0)
     {
         time.temperature = getTemperatureForTranche(time.hour);
     }
     
 }
-
 
 
 // Initialise la température

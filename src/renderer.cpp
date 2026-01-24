@@ -32,7 +32,6 @@ SDL_Texture* choisirFond( const MeteoTime& time,SDL_Texture* fondFroid,SDL_Textu
      }else if (time.temperature <= 38){
         return fondChaud; //temps chaud
      }else{
-     // Temps froid
       return fondCrame;  // Temps chaud
      }
 }
