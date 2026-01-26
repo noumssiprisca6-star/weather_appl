@@ -35,11 +35,11 @@ change en fonction de la température.
 
 
 ## Structure du projet
-'''
+
 # Weather_appl
 
 Application de simulation météo développée en C++ avec SDL3 et ImGui.
-
+```
 Weather_appl/
 ├── .git/               # Dépôt Git (historique des versions)
 ├── assets/             # Ressources du projet
@@ -68,8 +68,7 @@ Weather_appl/
 ├── .gitignore          # Fichiers à ignorer par Git
 ├── CMakeLists.txt      # Configuration de build (si tu utilises CMake)
 └── README.md           # Documentation du projet
-'''
----
+```
 
 ## Interface
 
@@ -80,7 +79,6 @@ L’interface affiche :
 - Un cercle blanc transparent
 - Un texte coloré selon la température
 
----
 
 ## Améliorations possibles
 
@@ -90,7 +88,7 @@ L’interface affiche :
 - Ajouter un mode manuel
 - Améliorer le rendu graphique
 
----
+
 
 ## Auteur
 NOUMSSI TIATSAP 
@@ -100,4 +98,5 @@ M.TEUGUIA
 Projet réalisé à des fins pédagogiques pour l’apprentissage du C++,
 de SDL3 et de Dear ImGui.
 ##  UNIVERS DU GAME PROGRAMMING
+
 
