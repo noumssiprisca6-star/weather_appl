@@ -1,5 +1,5 @@
 #include"../src/SDL3/SDL3_image/SDL_image.h"
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <iostream>
 
 int main() {
