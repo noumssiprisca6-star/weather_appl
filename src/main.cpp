@@ -344,7 +344,7 @@ SDL_Texture* chargerTexture(SDL_Renderer* renderer, const char* chemin)
        //fenetre 2 translucide  
         ImGui::SetNextWindowBgAlpha(0.0f); // a 100 % transparente
         //afin de modifier la taille de la fenetre imgui 
-        ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_Once);
+        ImGui::SetNextWindowSize(ImVec2(700, 600), ImGuiCond_Once);
        
 
         ImGui::Begin("#" ,nullptr, ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoTitleBar|ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoBackground  );
@@ -536,9 +536,40 @@ SDL_Texture* chargerTexture(SDL_Renderer* renderer, const char* chemin)
        ImGui::Text("  Dimanche : 9h");
         ImGui::Text(" Garoua");
         ImGui::TextColored(ImVec4(0.70f,0.90f,0.99f,1.0f)," Venteux");
-         ImGui:: Image((void*)iconvent ,ImVec2(35,35));
+        ImGui:: Image((void*)iconvent ,ImVec2(35,35));
        ImGui::Text(" 29 °C");
        ImGui::EndChild();
+
+       // ---------- Prévision 8 ----------
+     ImGui::BeginChild("p8", ImVec2(270, 200), true);
+     ImGui::Text(" Lundi : 15h");
+     ImGui::TextColored(ImVec4(1.00f,0.84f,0.31f,1.0f),"Buea");
+     ImGui::Text(" Soleil");
+      ImGui:: Image((void*)iconjour ,ImVec2(35,35));
+     ImGui::Text(" 37 °C");
+      ImGui::EndChild();
+
+      ImGui::Spacing();
+      // ---------- Prévision 9----------
+     ImGui::BeginChild("p9", ImVec2(270, 200), true);
+     ImGui::Text(" Jeudi : 6h");
+     ImGui::TextColored(ImVec4(0.70f,0.90f,0.99f,1.0f),"Douala");
+     ImGui::Text(" Nuageux");
+      ImGui:: Image((void*)iconnuage ,ImVec2(35,35));
+     ImGui::Text(" 27 °C");
+      ImGui::EndChild();
+
+      ImGui::Spacing();
+
+       // ---------- Prévision 10----------
+      ImGui::BeginChild("p10", ImVec2(270, 200), true);
+      ImGui::Text("Jeudi : 11h");
+      ImGui::Text("Yaounde");
+      ImGui::TextColored(ImVec4(0.36f,0.21f,0.69f,1.0f),"Orage");
+       ImGui:: Image((void*)icontu,ImVec2(35,35));
+     ImGui::Text("24 °C");
+     ImGui::EndChild();
+
 
       ImGui::End();
      // pour afficher un message
@@ -557,13 +588,13 @@ SDL_Texture* chargerTexture(SDL_Renderer* renderer, const char* chemin)
 
       case Nuageux:
       ImGui :: TextColored(ImVec4(0.7f , 0.7f ,0.7f ,1.0f) , "NUAGEUX");
-           ImGui:: Image((void*)iconnuage,ImVec2(50,50));
+      ImGui:: Image((void*)iconnuage,ImVec2(50,50));
       break;
 
       case Ensolleille :
 
       ImGui :: TextColored(ImVec4(1.0f , 0.9f ,0.3f ,1.0f) , "CHALEUR");
-         ImGui:: Image((void*)iconsun,ImVec2(50,50));
+      ImGui:: Image((void*)iconsun,ImVec2(50,50));
       break;
 
       case Leger_Soleil :

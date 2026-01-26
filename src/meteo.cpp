@@ -32,7 +32,7 @@ void initTime(MeteoTime& time)
 const char* getDayName(int dayIndex)
 {
     
-    const char* days[NB_JOURS] = {"Lundi","Mardi","Mercredi","Jeudi","Vendredi"};
+    const char* days[NB_JOURS] = {"Lundi","Mardi","Mercredi","Jeudi","Vendredi" ,"Samedi", "Dimanche"};
     return days[dayIndex];
 }
 
@@ -54,7 +54,7 @@ const char * Region[NB_REGION] = {
  Uint64 dernierchangement;
 
 void chefLieux(){
-     Uint64 maintenant =SDL_GetTicks();
+     Uint64 maintenant = SDL_GetTicks();
      if(maintenant - dernierchangement >= 6000 ){
         chefregion = (chefregion + 1)% NB_REGION ;
         dernierchangement = maintenant;
@@ -125,7 +125,7 @@ void updateTemperature(Temperature& t, float deltaTime)
     if (t.timer >= 4000)  // Toutes les 5 secondes
     {
         t.timer = 0.0f;   // Reset timer
-        t.valeur = (float)(rand() % 46 - 5); // -5 à 40
+        t.valeur = (float)(rand() % 46 - 5); // -5 à 46
     }
     
 }
@@ -142,7 +142,7 @@ void updateMeteotime(MeteoTime& time, float deltaTime )
         time.humidite = std :: rand() % 100 ;
         time.uv = std :: rand() % 100 ;
         time.pluie = std:: rand() % 100 + 1;      // 0 à 99
-         time.vent = std:: rand() % 100 + 1;      // 0 à 99
+          time.vent = std:: rand() % 100 + 1;      // 0 à 99
         
     }
 }
@@ -153,7 +153,7 @@ void gestion (MeteoTime& time){
     if( time.temperature <= 10  ){
         time.pluie = std::rand() % 31 + 4 ; //peu de pluie 
         time.vent = std::rand() % 60 + 20 ; //vent moderer
-        time.humidite = std::rand() % 80 + 30; //humidite forte
+        time.humidite = std::rand() % 80 + 20; //humidite forte
          time.uv = std::rand() % 6 ; // uv moderer
         //doux
     }else if(time.temperature <= 22){
@@ -166,13 +166,13 @@ void gestion (MeteoTime& time){
         time.pluie = std::rand() % 21 ; //pluie rare
         time.vent = std::rand () % 40 + 13 ; // le vent reduit
          time.humidite = std::rand() % 40 + 15 ; // l'humidite aussi
-          time.uv = std::rand() % 89 + 70 ; //uv augmente
+          time.uv = std::rand() % 80 + 20 ; //uv augmente
         //canicule
     }else{
       time.pluie = std::rand()% 6; // pas de pluie quasiment
       time.vent = std::rand()% 31 ; //pas assez de vent
        time.humidite = std::rand() % 20 + 1; //c'est sec
-        time.uv = std::rand() % 98 + 15 ; //les uv a max
+        time.uv = std::rand() % 85 + 15 ; //les uv a max
     }
 
 

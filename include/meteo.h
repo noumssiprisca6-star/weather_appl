@@ -9,12 +9,12 @@
 #include <iostream>
 #include<string>
 
-const int NB_JOURS = 5;
+const int NB_JOURS = 7 ;
 const int NB_REGION = 10 ;
 
 // Structure pour le temps
 struct MeteoTime
-{
+{ 
     int hour;        // 0-23
     int dayIndex;    // 0 = Lundi, ... 4 = Vendredi
     int chefregion;
